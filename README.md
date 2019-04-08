@@ -1,1 +1,1 @@
-# 3-darbas
+# 3 Laboratorinis darbas

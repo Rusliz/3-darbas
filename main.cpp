@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <iomanip>
+#include <fstream>
 using namespace std;
 
 struct studentas
@@ -10,43 +11,38 @@ struct studentas
     double gal, med;
 };
 
+bool rusiavimas(studentas a, studentas b)
+{
+    return a.var<b.var;
+}
+
 int main()
 {
-    string var, pav, zodis;
+    string var, pav;
     double nd_temp, egz, gal, vid, sum=0, med, viet1, viet2;
     vector <double> nd;
+    ifstream stud;
+    ofstream rez;
+    stud.open("kursiokai.txt");
+    rez.open("rezultatai.txt");
     studentas temp;
     vector <studentas> a;
     while(1)
     {
-        cout<<"Iveskite studento varda (kai baigsite iveskite \"Baigiau\"):"<<endl;
-        cin>>var;
+        stud>>var;
         if(var=="Baigiau")
             break;
-        cout<<"Iveskite studento pavarde:"<<endl;
-        cin>>pav;
-        cout<<"Iveskite studento namu darbu pazymius (kai baigsite, iveskite \"0\"):"<<endl;
+        stud>>pav;
         while(2)
         {
-            cin>>nd_temp;
+            stud>>nd_temp;
             if(nd_temp==0)
             break;
-            if (nd_temp < 1 || nd_temp > 10)
-        {
-                cout << "Pazymis turi buti nuo 1 iki 10" << endl;
-                continue;
-        }
             nd.push_back(nd_temp);
         }
-        cout<<"Iveskite egzamino ivertinima:"<<endl;
         while(3)
         {
-        cin>>egz;
-        if (egz < 1 || egz > 10)
-        {
-                cout << "Pazymis turi buti nuo 1 iki 10" << endl;
-                continue;
-        }
+        stud>>egz;
         break;
         }
             for(int i=0;i<nd.size();i++)
@@ -73,30 +69,11 @@ int main()
         nd.clear();
         sum=0;
     }
-    cout<<"Jeigu norite rezultatu medianos pavidalu iveskite \"Mediana\", jei galutinio ivertinimo, iveskite \"Galutinis\""<<endl;
-    while(4)
-    {
-        cin>>zodis;
-        if (zodis == "Mediana" || zodis == "Galutinis")
-            break;
-        cout << "Iveskite viena zodi \"Mediana\" arba \"Vidurkis\"" << endl;
-    }
-    if(zodis=="Mediana")
-    {
-    cout<<setw(12)<<left<<"Vardas"<<setw(12)<<"Pavarde"<<"Galutinis (Med.)"<<endl;
-    cout<<setfill('-')<<setw(40)<<"-"<<endl;
+    sort(a.begin(), a.end(), rusiavimas);
+    rez<<left<<setw(12)<<"Vardas"<<setw(12)<<"Pavarde"<<setw(15)<<right<<"Galutinis(Vid.)"<<setw(18)<<right<<"Galutinis(Med.)"<<endl;
+    rez<<setfill('-')<<setw(57)<<"-"<<endl;
     for(int i=0;i<a.size();i++)
     {
-        cout<<setprecision(2)<<setfill(' ')<<left<<setw(12)<<a[i].var<<setw(12)<<a[i].pav<<right<<setw(16)<<a[i].med<<endl;
-    }
-    }
-    else
-    {
-    cout<<setw(12)<<left<<"Vardas"<<setw(12)<<"Pavarde"<<"Galutinis (Vid.)"<<endl;
-    cout<<setfill('-')<<setw(40)<<"-"<<endl;
-    for(int i=0;i<a.size();i++)
-    {
-        cout<<setprecision(2)<<setfill(' ')<<left<<setw(12)<<a[i].var<<setw(12)<<a[i].pav<<setw(16)<<right<<a[i].gal<<endl;
-    }
+        rez<<setfill(' ')<<left<<setw(12)<<a[i].var<<setw(12)<<a[i].pav<<setw(15)<<right<<a[i].gal<<setw(18)<<right<<a[i].med<<endl;
     }
 }
